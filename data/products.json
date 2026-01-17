@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "title": "Remera",
+    "description": "Remera básica",
+    "price": 12000,
+    "stock": 15,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": "2",
+    "title": "Pantalón",
+    "description": "Pantalón de jean",
+    "price": 28000,
+    "stock": 10,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": "3",
+    "title": "Campera",
+    "description": "Campera de abrigo",
+    "price": 45000,
+    "stock": 5,
+    "category": "Ropa",
+    "thumbnails": []
+  }
+]
