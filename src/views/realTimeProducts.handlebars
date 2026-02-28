@@ -1,0 +1,84 @@
+<h1>Productos en Tiempo Real</h1>
+
+<ul id="product-list">
+  {{#each products}}
+    <li id="product-{{this.id}}">
+      <strong>{{this.title}}</strong> — ${{this.price}} | Stock: {{this.stock}} | Categoría: {{this.category}}
+      <br/>
+      <small style="color: gray;">ID: {{this.id}}</small>
+    </li>
+  {{else}}
+    <li id="empty-msg">No hay productos cargados todavía.</li>
+  {{/each}}
+</ul>
+
+<hr />
+
+<h2>Agregar Producto</h2>
+<form id="add-form">
+  <input type="text" id="title" placeholder="Título" required /><br /><br />
+  <input type="text" id="description" placeholder="Descripción" /><br /><br />
+  <input type="number" id="price" placeholder="Precio" required /><br /><br />
+  <input type="text" id="code" placeholder="Código" required /><br /><br />
+  <input type="number" id="stock" placeholder="Stock" required /><br /><br />
+  <input type="text" id="category" placeholder="Categoría" required /><br /><br />
+  <button type="submit">Agregar</button>
+</form>
+
+<hr />
+
+<h2>Eliminar Producto</h2>
+<input type="text" id="delete-id" placeholder="ID del producto" style="width: 300px;" />
+<button id="delete-btn">Eliminar</button>
+
+<br /><br />
+<a href="/">← Volver a home</a>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  /
+  socket.on("productListUpdated", (products) => {
+    const list = document.getElementById("product-list");
+    if (products.length === 0) {
+      list.innerHTML = '<li id="empty-msg">No hay productos cargados todavía.</li>';
+      return;
+    }
+    list.innerHTML = products
+      .map(
+        (p) =>
+          `<li id="product-${p.id}"><strong>${p.title}</strong> — $${p.price} | Stock: ${p.stock} | Categoría: ${p.category}<br/><small style="color: gray;">ID: ${p.id}</small></li>`
+      )
+      .join("");
+  });
+
+
+  document.getElementById("add-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const body = {
+      title: document.getElementById("title").value,
+      description: document.getElementById("description").value,
+      price: Number(document.getElementById("price").value),
+      code: document.getElementById("code").value,
+      stock: Number(document.getElementById("stock").value),
+      category: document.getElementById("category").value,
+      status: true,
+      thumbnails: [],
+    };
+    await fetch("/api/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    e.target.reset();
+  });
+
+
+  document.getElementById("delete-btn").addEventListener("click", async () => {
+    const id = document.getElementById("delete-id").value.trim();
+    if (!id) return alert("Ingresá un ID válido");
+    await fetch(`/api/products/${id}`, { method: "DELETE" });
+    document.getElementById("delete-id").value = "";
+  });
+</script>

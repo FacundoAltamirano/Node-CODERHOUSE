@@ -1,29 +1,90 @@
 [
   {
-    "id": "1",
-    "title": "Remera",
-    "description": "Remera básica",
-    "price": 12000,
-    "stock": 15,
-    "category": "Ropa",
-    "thumbnails": []
+    "title": "Campera de Cuero",
+    "description": "Campera de cuero",
+    "price": 90000,
+    "code": "32145",
+    "stock": 20,
+    "category": "Abrigos",
+    "status": true,
+    "thumbnails": [],
+    "id": "05e001b4-25f1-4626-baaa-2a07f737ed97"
   },
   {
-    "id": "2",
-    "title": "Pantalón",
-    "description": "Pantalón de jean",
+    "title": "Remera Básica",
+    "description": "Remera de algodón",
+    "price": 15000,
+    "code": "44321",
+    "stock": 50,
+    "category": "Remeras",
+    "status": true,
+    "thumbnails": [],
+    "id": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e"
+  },
+  {
+    "title": "Jean Recto",
+    "description": "Jean de corte recto",
     "price": 28000,
-    "stock": 10,
-    "category": "Ropa",
-    "thumbnails": []
+    "code": "66543",
+    "stock": 25,
+    "category": "Pantalones",
+    "status": true,
+    "thumbnails": [],
+    "id": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d"
   },
   {
-    "id": "3",
-    "title": "Campera",
-    "description": "Campera de abrigo",
-    "price": 45000,
-    "stock": 5,
-    "category": "Ropa",
-    "thumbnails": []
+    "title": "Buzo con Capucha",
+    "description": "Buzo canguro de algodón",
+    "price": 35000,
+    "code": "55432",
+    "stock": 30,
+    "category": "Buzos",
+    "status": true,
+    "thumbnails": [],
+    "id": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e"
+  },
+  {
+    "title": "Camisa Oxford",
+    "description": "Camisa manga larga",
+    "price": 22000,
+    "code": "11987",
+    "stock": 18,
+    "category": "Camisas",
+    "status": true,
+    "thumbnails": [],
+    "id": "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f"
+  },
+  {
+    "title": "Bermuda de Lino",
+    "description": "Bermuda liviana para verano",
+    "price": 18000,
+    "code": "22876",
+    "stock": 40,
+    "category": "Pantalones",
+    "status": true,
+    "thumbnails": [],
+    "id": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a"
+  },
+  {
+    "title": "Campera Rompevientos",
+    "description": "Campera liviana impermeable",
+    "price": 55000,
+    "code": "33765",
+    "stock": 15,
+    "category": "Abrigos",
+    "status": true,
+    "thumbnails": [],
+    "id": "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b"
+  },
+  {
+    "title": "Remera Polo",
+    "description": "Remera polo manga corta",
+    "price": 20000,
+    "code": "44654",
+    "stock": 35,
+    "category": "Remeras",
+    "status": true,
+    "thumbnails": [],
+    "id": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c"
   }
 ]

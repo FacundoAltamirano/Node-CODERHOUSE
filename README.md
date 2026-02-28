@@ -1,45 +1,66 @@
-Entrega N°1 – Backend Node.js | CoderHouse
-Alumno: Facundo Altamirano
+# Entrega N°2 – Backend Node.js | CoderHouse
 
-Descripción
-Este proyecto corresponde a la Primera **Entrega del curso de Backend con Node.js de CoderHouse**.
-
-El objetivo es desarrollar una API REST utilizando **Node.js y Express**, que permita gestionar **productos** y **carritos de compra**, con persistencia de datos mediante el sistema de archivos (JSON).
-
-Toda la interacción con la API se realiza a través de herramientas como **Postman**, sin implementación visual.
+**Alumno:** Facundo Altamirano
 
 ---
 
-Tecnologías utilizadas
+## Descripción
+
+Este proyecto es la continuación de la primera entrega del curso de Backend con Node.js de CoderHouse.
+
+Se incorporó un motor de plantillas (**Handlebars**) y comunicación en tiempo real mediante **WebSockets** (Socket.io), manteniendo toda la funcionalidad de la API REST desarrollada anteriormente.
+
+---
+
+## Tecnologías utilizadas
 
 - Node.js
 - Express
+- Handlebars (express-handlebars)
+- Socket.io
 - File System (fs)
 - dotenv
 - Nodemon (entorno de desarrollo)
 
 ---
 
-Estructura del proyecto
+## Estructura del proyecto
 
+```
 src/
 ├─ app.js
 ├─ routes/
-│ ├─ products.router.js
-│ └─ carts.router.js
-└─ managers/
-├─ ProductManager.js
-└─ CartManager.js
+│  ├─ products.router.js
+│  ├─ carts.router.js
+│  └─ views.router.js
+├─ managers/
+│  ├─ ProductManager.js
+│  └─ CartManager.js
+└─ views/
+   ├─ layouts/
+   │  └─ main.handlebars
+   ├─ home.handlebars
+   └─ realTimeProducts.handlebars
 
 data/
 ├─ products.json
 └─ carts.json
+```
 
 ---
 
-Endpoints disponibles
+## Vistas disponibles
 
-Productos (`/api/products`)
+| Ruta                | Vista                       | Descripción                                         |
+| ------------------- | --------------------------- | --------------------------------------------------- |
+| `/`                 | home.handlebars             | Lista estática de todos los productos               |
+| `/realtimeproducts` | realTimeProducts.handlebars | Lista de productos con actualización en tiempo real |
+
+---
+
+## API Endpoints
+
+**Productos** (`/api/products`)
 
 - `GET /` → Listar todos los productos
 - `GET /:pid` → Obtener producto por ID
@@ -47,35 +68,33 @@ Productos (`/api/products`)
 - `PUT /:pid` → Actualizar un producto
 - `DELETE /:pid` → Eliminar un producto
 
-Carritos (`/api/carts`)
+**Carritos** (`/api/carts`)
 
 - `POST /` → Crear un nuevo carrito
 - `GET /:cid` → Listar productos del carrito
-- `POST /:cid/product/:pid` → Agregar producto al carrito (incrementa cantidad si ya existe)
+- `POST /:cid/product/:pid` → Agregar producto al carrito
 
 ---
 
-Configuración
+## ¿Cómo funciona el tiempo real?
 
-El servidor escucha por defecto en el puerto **8080**, configurable mediante variables de entorno utilizando `dotenv`.
+Cuando se crea o elimina un producto a través de la API REST, el servidor emite un evento de Socket.io con la lista actualizada. La vista `/realtimeproducts` escucha ese evento y re-renderiza la lista automáticamente, sin necesidad de recargar la página.
 
-Ejemplo de archivo `.env`:
+La conexión entre HTTP y WebSockets se resuelve pasando la instancia de `io` a través de `req.io` en cada request, lo que permite emitir eventos desde dentro de los routers de Express.
 
+---
+
+## Configuración
+
+El servidor escucha en el puerto definido en el archivo `.env`:
+
+```
 PORT=8080
+```
 
 ---
 
-Notas adicionales
-Además del contenido del curso de CoderHouse, para el desarrollo de este proyecto se aplicaron **Buenas prácticas aprendidas en el curso**:
-
-> **NodeJS: De Cero a Experto** – Fernando Herrera (Udemy)
-
-Este curso se está realizando de forma paralela con el objetivo de reforzar conceptos fundamentales de Node.js, Express y arquitectura backend.
-
----
-
-Observaciones
+## Observaciones
 
 - No se incluye la carpeta `node_modules`
-- No se realiza implementación visual
-- Proyecto listo para ser probado mediante Postman
+- La persistencia se mantiene en archivos JSON dentro de `/data`
