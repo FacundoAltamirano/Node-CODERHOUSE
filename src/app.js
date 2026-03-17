@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
 import path from "path";
+import mongoose from "mongoose";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -19,8 +20,14 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
-// Handlebars
-app.engine("handlebars", engine());
+app.engine(
+  "handlebars",
+  engine({
+    helpers: {
+      eq: (a, b) => a === b,
+    },
+  }),
+);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
@@ -28,7 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Hacemos io accesible desde los routers
 app.use((req, res, next) => {
   req.io = io;
   next();
@@ -42,8 +48,16 @@ io.on("connection", (socket) => {
   console.log("Cliente conectado:", socket.id);
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
-httpServer.listen(PORT, () => {
-  console.log(`Servidor escuchando en puerto ${PORT}`);
-});
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Conectado a MongoDB");
+    httpServer.listen(PORT, () => {
+      console.log(`Servidor escuchando en puerto ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Error al conectar a MongoDB:", err);
+  });

@@ -1,4 +1,4 @@
-# Entrega N°2 – Backend Node.js | CoderHouse
+# Entrega Final – Backend Node.js | CoderHouse
 
 **Alumno:** Facundo Altamirano
 
@@ -6,9 +6,9 @@
 
 ## Descripción
 
-Este proyecto es la continuación de la primera entrega del curso de Backend con Node.js de CoderHouse.
+Este proyecto es la entrega final del curso de Backend con Node.js de CoderHouse, construido sobre las entregas anteriores.
 
-Se incorporó un motor de plantillas (**Handlebars**) y comunicación en tiempo real mediante **WebSockets** (Socket.io), manteniendo toda la funcionalidad de la API REST desarrollada anteriormente.
+Se migró la persistencia de archivos JSON a **MongoDB** con **Mongoose**, se profesionalizaron las consultas de productos con filtros, paginación y ordenamiento, y se completó la gestión de carritos con nuevos endpoints.
 
 ---
 
@@ -16,9 +16,10 @@ Se incorporó un motor de plantillas (**Handlebars**) y comunicación en tiempo 
 
 - Node.js
 - Express
+- MongoDB + Mongoose
+- mongoose-paginate-v2
 - Handlebars (express-handlebars)
 - Socket.io
-- File System (fs)
 - dotenv
 - Nodemon (entorno de desarrollo)
 
@@ -33,28 +34,28 @@ src/
 │  ├─ products.router.js
 │  ├─ carts.router.js
 │  └─ views.router.js
-├─ managers/
-│  ├─ ProductManager.js
-│  └─ CartManager.js
+├─ models/
+│  ├─ Product.js
+│  └─ Cart.js
 └─ views/
    ├─ layouts/
    │  └─ main.handlebars
    ├─ home.handlebars
+   ├─ productDetail.handlebars
+   ├─ cart.handlebars
    └─ realTimeProducts.handlebars
-
-data/
-├─ products.json
-└─ carts.json
 ```
 
 ---
 
 ## Vistas disponibles
 
-| Ruta                | Vista                       | Descripción                                         |
-| ------------------- | --------------------------- | --------------------------------------------------- |
-| `/`                 | home.handlebars             | Lista estática de todos los productos               |
-| `/realtimeproducts` | realTimeProducts.handlebars | Lista de productos con actualización en tiempo real |
+| Ruta                | Vista                       | Descripción                                       |
+| ------------------- | --------------------------- | ------------------------------------------------- |
+| `/`                 | home.handlebars             | Lista de productos con paginación y filtros       |
+| `/products/:pid`    | productDetail.handlebars    | Detalle del producto con botón agregar al carrito |
+| `/carts/:cid`       | cart.handlebars             | Vista del carrito con productos completos         |
+| `/realtimeproducts` | realTimeProducts.handlebars | Gestión de productos en tiempo real               |
 
 ---
 
@@ -62,7 +63,11 @@ data/
 
 **Productos** (`/api/products`)
 
-- `GET /` → Listar todos los productos
+- `GET /` → Listar productos con paginación, filtros y ordenamiento
+- `GET /?query=Abrigos` → Filtrar por categoría
+- `GET /?query=true` → Filtrar por disponibilidad
+- `GET /?sort=asc` → Ordenar por precio ascendente
+- `GET /?sort=desc` → Ordenar por precio descendente
 - `GET /:pid` → Obtener producto por ID
 - `POST /` → Crear un nuevo producto
 - `PUT /:pid` → Actualizar un producto
@@ -71,25 +76,43 @@ data/
 **Carritos** (`/api/carts`)
 
 - `POST /` → Crear un nuevo carrito
-- `GET /:cid` → Listar productos del carrito
+- `GET /:cid` → Listar productos del carrito (con populate)
 - `POST /:cid/product/:pid` → Agregar producto al carrito
+- `PUT /:cid` → Reemplazar todos los productos del carrito
+- `PUT /:cid/products/:pid` → Actualizar cantidad de un producto
+- `DELETE /:cid/products/:pid` → Eliminar un producto del carrito
+- `DELETE /:cid` → Vaciar el carrito
 
 ---
 
-## ¿Cómo funciona el tiempo real?
+## Paginación
 
-Cuando se crea o elimina un producto a través de la API REST, el servidor emite un evento de Socket.io con la lista actualizada. La vista `/realtimeproducts` escucha ese evento y re-renderiza la lista automáticamente, sin necesidad de recargar la página.
+El `GET /api/products` devuelve el siguiente formato:
 
-La conexión entre HTTP y WebSockets se resuelve pasando la instancia de `io` a través de `req.io` en cada request, lo que permite emitir eventos desde dentro de los routers de Express.
+```json
+{
+  "status": "success",
+  "payload": [...],
+  "totalPages": 2,
+  "prevPage": null,
+  "nextPage": 2,
+  "page": 1,
+  "hasPrevPage": false,
+  "hasNextPage": true,
+  "prevLink": null,
+  "nextLink": "/api/products?page=2"
+}
+```
 
 ---
 
 ## Configuración
 
-El servidor escucha en el puerto definido en el archivo `.env`:
+Crear un archivo `.env` en la raíz del proyecto:
 
 ```
-PORT=8080
+PORT=8081
+MONGODB_URI=mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/<dbname>
 ```
 
 ---
@@ -97,4 +120,5 @@ PORT=8080
 ## Observaciones
 
 - No se incluye la carpeta `node_modules`
-- La persistencia se mantiene en archivos JSON dentro de `/data`
+- No se incluye el archivo `.env`
+- La persistencia se realiza en MongoDB Atlas

@@ -1,16 +1,47 @@
-<h1>Lista de Productos</h1>
+<h1>Tienda de Ropa</h1>
+
+<form id="filter-form" style="margin-bottom: 20px;">
+  <input type="text" name="query" placeholder="Buscar por categoría" value="{{query}}" />
+  <select name="sort">
+    <option value="">Sin ordenar</option>
+    <option value="asc" {{#if (eq sort "asc")}}selected{{/if}}>Precio: menor a mayor</option>
+    <option value="desc" {{#if (eq sort "desc")}}selected{{/if}}>Precio: mayor a menor</option>
+  </select>
+  <button type="submit">Filtrar</button>
+</form>
 
 {{#if products.length}}
   <ul>
     {{#each products}}
       <li>
         <strong>{{this.title}}</strong> — ${{this.price}} | Stock: {{this.stock}} | Categoría: {{this.category}}
+        <br/>
+        <a href="/products/{{this._id}}">Ver detalle</a>
       </li>
     {{/each}}
   </ul>
+  <div style="margin-top: 20px;">
+    <span>Página {{page}} de {{totalPages}}</span>
+    &nbsp;
+    {{#if hasPrevPage}}<a href="{{prevLink}}">← Anterior</a>{{/if}}
+    &nbsp;
+    {{#if hasNextPage}}<a href="{{nextLink}}">Siguiente →</a>{{/if}}
+  </div>
 {{else}}
-  <p>No hay productos cargados todavía.</p>
+  <p>No hay productos que coincidan con la búsqueda.</p>
 {{/if}}
 
-<br />
-<a href="/realtimeproducts">→ Ver productos en tiempo real</a>
+<br/>
+<a href="/realtimeproducts">→ Gestión en tiempo real</a>
+
+<script>
+  document.getElementById("filter-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const query = e.target.query.value;
+    const sort = e.target.sort.value;
+    let url = "/?";
+    if (query) url += `query=${query}&`;
+    if (sort) url += `sort=${sort}&`;
+    window.location.href = url;
+  });
+</script>

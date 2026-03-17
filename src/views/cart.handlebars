@@ -1,0 +1,21 @@
+<h1>Carrito</h1>
+<p><strong>ID:</strong> {{cart._id}}</p>
+{{#if cart.products.length}}
+  <ul>
+    {{#each cart.products}}
+      <li>
+        <strong>{{this.product.title}}</strong> — ${{this.product.price}} | Cantidad: {{this.quantity}}
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>El carrito está vacío.</p>
+{{/if}}
+<br/>
+<a href="/">← Volver</a>
+```
+
+**`.env`** en la raíz del proyecto:
+```
+PORT=8081
+MONGODB_URI=mongodb+srv://facugaltamirano_db_user:0upHiA0osq1vKDT4@coderhouse.1psum4d.mongodb.net/coderhouse?appName=CoderHouse
