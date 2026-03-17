@@ -120,5 +120,6 @@ MONGODB_URI=mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/<dbname>
 ## Observaciones
 
 - No se incluye la carpeta `node_modules`
-- No se incluye el archivo `.env`
+- No se incluye el archivo `.env` por seguridad
 - La persistencia se realiza en MongoDB Atlas
+- Para probar el proyecto, solicitar las credenciales de conexión o configurar una base de datos propia en MongoDB Atlas
